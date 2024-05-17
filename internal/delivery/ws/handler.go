@@ -7,16 +7,13 @@ import (
 
 type WebsocketHandler struct {
 	service int
+	group   fiber.Router
 }
 
-func NewWebsocketHandler(service int) *WebsocketHandler {
-	return &WebsocketHandler{service: service}
+func NewWebsocketHandler(service int, group fiber.Router) *WebsocketHandler {
+	return &WebsocketHandler{service: service, group: group}
 }
 
-func (h *WebsocketHandler) InitRoutes() *fiber.App {
-	router := fiber.New()
-
-	router.Get("/ws/chat", websocket.New(chatConnection))
-
-	return router
+func (h *WebsocketHandler) InitRoutes() {
+	h.group.Get("/ws/chat", websocket.New(h.chatConnection))
 }

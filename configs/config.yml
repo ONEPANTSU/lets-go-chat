@@ -1,11 +1,10 @@
 app:
   http_port: "8080"
-  ws_port: "8081"
 
 db:
   driver: "postgres"
   host: "localhost"
   port: "5432"
-  dbname: "todo_list"
+  dbname: "gochat"
   username: "postgres"
   queries: "sslmode=disable"

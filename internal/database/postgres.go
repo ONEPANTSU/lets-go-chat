@@ -1,7 +1,6 @@
 package database
 
 import (
-	"database/sql"
 	"lets-go-chat/internal/config"
 )
 
