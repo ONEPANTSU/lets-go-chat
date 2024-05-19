@@ -6,7 +6,9 @@ import (
 	"github.com/jackc/pgx/v5"
 	"github.com/sirupsen/logrus"
 	"lets-go-chat/internal/config"
+	"lets-go-chat/internal/delivery"
 	wsHandler "lets-go-chat/internal/delivery/ws"
+	servicePool "lets-go-chat/internal/service"
 	"os"
 	"os/signal"
 	"syscall"
@@ -29,8 +31,14 @@ func (app App) Start() {
 	}
 
 	server := fiber.New()
-	handler := wsHandler.NewWebsocketHandler(1, server.Group("/api"))
-	handler.InitRoutes()
+	api := server.Group("/api")
+	service := servicePool.NewService()
+	handlers := []delivery.Handler{
+		wsHandler.NewWebsocketHandler(service, api.Group("/ws")),
+	}
+	for _, handler := range handlers {
+		handler.InitRoutes()
+	}
 
 	go func() {
 		if err := server.Listen(":" + app.cfg.App.HTTPPort); err != nil {
