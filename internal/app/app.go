@@ -7,7 +7,9 @@ import (
 	"github.com/sirupsen/logrus"
 	"lets-go-chat/internal/config"
 	"lets-go-chat/internal/delivery"
+	httpHandler "lets-go-chat/internal/delivery/http"
 	wsHandler "lets-go-chat/internal/delivery/ws"
+	repositoryPool "lets-go-chat/internal/repository/postgres"
 	servicePool "lets-go-chat/internal/service"
 	"os"
 	"os/signal"
@@ -32,9 +34,12 @@ func (app App) Start() {
 
 	server := fiber.New()
 	api := server.Group("/api")
-	service := servicePool.NewService()
+
+	repository := repositoryPool.NewPostgresRepository(db)
+	service := servicePool.NewService(repository)
 	handlers := []delivery.Handler{
 		wsHandler.NewWebsocketHandler(service, api.Group("/ws")),
+		httpHandler.NewHTTPHandler(service, api),
 	}
 	for _, handler := range handlers {
 		handler.InitRoutes()
