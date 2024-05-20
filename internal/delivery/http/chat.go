@@ -7,6 +7,16 @@ import (
 	"strconv"
 )
 
+// @Summary Get Chat
+// @Tags chat
+// @Description Get chat by its uuid
+// @Accept json
+// @Produce json
+// @Param chat_id path string true "Chat ID" format(uuid)
+// @Success 200 {object} Response
+// @Failure 400 {object} string "Bad request"
+// @Failure 500 {object} string "Internal server error"
+// @Router /api/chat/{chat_id} [get]
 func (h *HTTPHandler) getChat(ctx *fiber.Ctx) error {
 	chatID, err := uuid.Parse(ctx.Params("chat_id"))
 	if err != nil {
@@ -16,9 +26,20 @@ func (h *HTTPHandler) getChat(ctx *fiber.Ctx) error {
 	if err != nil {
 		return fiber.NewError(fiber.StatusInternalServerError, err.Error())
 	}
-	return ctx.JSON(chat)
+	return ctx.JSON(Response{Success: true, Data: chat})
 }
 
+// @Summary Create Chat
+// @Tags chat
+// @Description Create new chat
+// @Accept json
+// @Produce json
+// @Param chat_id path string true "Chat ID" format(uuid)
+// @Param user_id query string true "User ID" format(uuid)
+// @Success 200 {object} Response
+// @Failure 400 {object} string "Bad request"
+// @Failure 500 {object} string "Internal server error"
+// @Router /api/chat [post]
 func (h *HTTPHandler) createChat(ctx *fiber.Ctx) error {
 	var chat domain.ChatInDB
 	if err := ctx.BodyParser(&chat); err != nil {
@@ -28,9 +49,20 @@ func (h *HTTPHandler) createChat(ctx *fiber.Ctx) error {
 	if err != nil {
 		return fiber.NewError(fiber.StatusInternalServerError, err.Error())
 	}
-	return ctx.JSON(map[string]string{"chat_id": chatID.String()})
+	return ctx.JSON(Response{Success: true, Data: chatID.String()})
 }
 
+// @Summary Delete Chat
+// @Tags chat
+// @Description Delete chat by its uuid
+// @Accept json
+// @Produce json
+// @Param chat_id path string true "Chat ID" format(uuid)
+// @Param user_id query string true "User ID" format(uuid)
+// @Success 200 {object} Response
+// @Failure 400 {object} string "Bad request"
+// @Failure 500 {object} string "Internal server error"
+// @Router /api/chat/{chat_id} [delete]
 func (h *HTTPHandler) deleteChat(ctx *fiber.Ctx) error {
 	chatID, err := uuid.Parse(ctx.Params("chat_id"))
 	if err != nil {
@@ -44,9 +76,19 @@ func (h *HTTPHandler) deleteChat(ctx *fiber.Ctx) error {
 	if err != nil {
 		return fiber.NewError(fiber.StatusInternalServerError, err.Error())
 	}
-	return ctx.JSON(map[string]bool{"deleted": true})
+	return ctx.JSON(Response{Success: true})
 }
 
+// @Summary Get Chats Members
+// @Tags chat
+// @Description Get members uuids from concrete chat
+// @Accept json
+// @Produce json
+// @Param chat_id path string true "Chat ID" format(uuid)
+// @Success 200 {object} Response
+// @Failure 400 {object} string "Bad request"
+// @Failure 500 {object} string "Internal server error"
+// @Router /api/chat/{chat_id}/members [get]
 func (h *HTTPHandler) getMembers(ctx *fiber.Ctx) error {
 	chatID, err := uuid.Parse(ctx.Params("chat_id"))
 	if err != nil {
@@ -56,9 +98,21 @@ func (h *HTTPHandler) getMembers(ctx *fiber.Ctx) error {
 	if err != nil {
 		return fiber.NewError(fiber.StatusInternalServerError, err.Error())
 	}
-	return ctx.JSON(members)
+	return ctx.JSON(Response{Success: true, Data: members})
 }
 
+// @Summary Get Chats Messages
+// @Tags chat
+// @Description Get messages with offset and limit from concrete chat
+// @Accept json
+// @Produce json
+// @Param chat_id path string true "Chat ID" format(uuid)
+// @Param limit query integer true "Limit"
+// @Param offset query integer true "Limit"
+// @Success 200 {object} Response
+// @Failure 400 {object} string "Bad request"
+// @Failure 500 {object} string "Internal server error"
+// @Router /api/chat/{chat_id}/messages [get]
 func (h *HTTPHandler) getMessages(ctx *fiber.Ctx) error {
 	chatID, err := uuid.Parse(ctx.Params("chat_id"))
 	if err != nil {
@@ -76,5 +130,5 @@ func (h *HTTPHandler) getMessages(ctx *fiber.Ctx) error {
 	if err != nil {
 		return err
 	}
-	return ctx.JSON(messages)
+	return ctx.JSON(Response{Success: true, Data: messages})
 }

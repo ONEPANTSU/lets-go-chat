@@ -9,14 +9,8 @@ import (
 // @title           Let's Go Chat API
 // @version         1.0
 // @description     This is an API for Let's Go Chat Application
-
 // @host localhost:8080
 // @BasePath  /
-
-// @securityDefinitions.apikey API Auth Key
-// @in header
-// @name Authorization
-
 func main() {
 	logrus.SetFormatter(new(logrus.JSONFormatter))
 	cfg := config.NewConfig()

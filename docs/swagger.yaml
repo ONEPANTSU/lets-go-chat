@@ -1,0 +1,259 @@
+basePath: /
+definitions:
+  http.Response:
+    properties:
+      data: {}
+      success:
+        type: boolean
+    type: object
+host: localhost:8080
+info:
+  contact: {}
+  description: This is an API for Let's Go Chat Application
+  title: Let's Go Chat API
+  version: "1.0"
+paths:
+  /api/chat:
+    post:
+      consumes:
+      - application/json
+      description: Create new chat
+      parameters:
+      - description: Chat ID
+        format: uuid
+        in: path
+        name: chat_id
+        required: true
+        type: string
+      - description: User ID
+        format: uuid
+        in: query
+        name: user_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/http.Response'
+        "400":
+          description: Bad request
+          schema:
+            type: string
+        "500":
+          description: Internal server error
+          schema:
+            type: string
+      summary: Create Chat
+      tags:
+      - chat
+  /api/chat/{chat_id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete chat by its uuid
+      parameters:
+      - description: Chat ID
+        format: uuid
+        in: path
+        name: chat_id
+        required: true
+        type: string
+      - description: User ID
+        format: uuid
+        in: query
+        name: user_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/http.Response'
+        "400":
+          description: Bad request
+          schema:
+            type: string
+        "500":
+          description: Internal server error
+          schema:
+            type: string
+      summary: Delete Chat
+      tags:
+      - chat
+    get:
+      consumes:
+      - application/json
+      description: Get chat by its uuid
+      parameters:
+      - description: Chat ID
+        format: uuid
+        in: path
+        name: chat_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/http.Response'
+        "400":
+          description: Bad request
+          schema:
+            type: string
+        "500":
+          description: Internal server error
+          schema:
+            type: string
+      summary: Get Chat
+      tags:
+      - chat
+  /api/chat/{chat_id}/members:
+    get:
+      consumes:
+      - application/json
+      description: Get members uuids from concrete chat
+      parameters:
+      - description: Chat ID
+        format: uuid
+        in: path
+        name: chat_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/http.Response'
+        "400":
+          description: Bad request
+          schema:
+            type: string
+        "500":
+          description: Internal server error
+          schema:
+            type: string
+      summary: Get Chats Members
+      tags:
+      - chat
+  /api/chat/{chat_id}/messages:
+    get:
+      consumes:
+      - application/json
+      description: Get messages with offset and limit from concrete chat
+      parameters:
+      - description: Chat ID
+        format: uuid
+        in: path
+        name: chat_id
+        required: true
+        type: string
+      - description: Limit
+        in: query
+        name: limit
+        required: true
+        type: integer
+      - description: Limit
+        in: query
+        name: offset
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/http.Response'
+        "400":
+          description: Bad request
+          schema:
+            type: string
+        "500":
+          description: Internal server error
+          schema:
+            type: string
+      summary: Get Chats Messages
+      tags:
+      - chat
+  /api/user/join/{chat_id}:
+    post:
+      consumes:
+      - application/json
+      description: Join to concrete chat by its uuid
+      parameters:
+      - description: Chat ID
+        format: uuid
+        in: path
+        name: chat_id
+        required: true
+        type: string
+      - description: User ID
+        format: uuid
+        in: query
+        name: user_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Returns true if the user is successfully joined
+          schema:
+            $ref: '#/definitions/http.Response'
+        "400":
+          description: Bad request
+          schema:
+            type: string
+        "500":
+          description: Internal server error
+          schema:
+            type: string
+      summary: Join Chat
+      tags:
+      - user
+  /api/user/leave/{chat_id}:
+    post:
+      consumes:
+      - application/json
+      description: Leave concrete chat by its uuid
+      parameters:
+      - description: Chat ID
+        format: uuid
+        in: path
+        name: chat_id
+        required: true
+        type: string
+      - description: User ID
+        format: uuid
+        in: query
+        name: user_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Returns true if the user is successfully left
+          schema:
+            $ref: '#/definitions/http.Response'
+        "400":
+          description: Bad request
+          schema:
+            type: string
+        "500":
+          description: Internal server error
+          schema:
+            type: string
+      summary: Leave Chat
+      tags:
+      - user
+swagger: "2.0"

@@ -5,6 +5,9 @@ import (
 	"github.com/gofiber/fiber/v2"
 	"github.com/jackc/pgx/v5"
 	"github.com/sirupsen/logrus"
+	"github.com/swaggo/fiber-swagger"
+
+	_ "lets-go-chat/docs"
 	"lets-go-chat/internal/config"
 	"lets-go-chat/internal/delivery"
 	httpHandler "lets-go-chat/internal/delivery/http"
@@ -33,6 +36,7 @@ func (app App) Start() {
 	}
 
 	server := fiber.New()
+	server.Get("/swagger/*", fiberSwagger.WrapHandler)
 	api := server.Group("/api")
 
 	repository := repositoryPool.NewPostgresRepository(db)

@@ -5,6 +5,11 @@ import (
 	"lets-go-chat/internal/service"
 )
 
+type Response struct {
+	Success bool        `json:"success"`
+	Data    interface{} `json:"data"`
+}
+
 type HTTPHandler struct {
 	service *service.Service
 	group   fiber.Router
@@ -18,6 +23,7 @@ func NewHTTPHandler(service *service.Service, group fiber.Router) *HTTPHandler {
 }
 
 func (h *HTTPHandler) InitRoutes() {
+
 	chatGroup := h.group.Group("/chat")
 	chatGroup.Get("/:chat_id<guid>", h.getChat)
 	chatGroup.Post("/", h.createChat)
